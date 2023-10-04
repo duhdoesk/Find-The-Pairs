@@ -1,7 +1,7 @@
 package com.hotwater.findthepairs.presentation.play
 
-import android.content.res.Resources.Theme
 import com.hotwater.findthepairs.domain.model.Character
+import com.hotwater.findthepairs.domain.model.Theme
 
 sealed class PlayUiState {
 
