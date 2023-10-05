@@ -11,7 +11,8 @@ fun getRawPlayUiStateSuccess(): PlayUiState.Success {
     return PlayUiState.Success(
         theme = getRawTheme(),
         foundPairs = emptyList(),
-        notFoundPairs = rawTesting(),
+        allPairs = rawTesting(),
+        turnedCharacters = Pair(null, null),
         playingPhase = PlayingPhase.RUNNING
     )
 }

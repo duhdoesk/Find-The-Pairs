@@ -23,7 +23,8 @@ sealed class PlayUiState {
     data class Success(
         val theme: Theme,
         val foundPairs: List<Character>,
-        val notFoundPairs: List<Character>,
+        val allPairs: List<Character>,
+        val turnedCharacters: Pair<Character?, Character?>,
         val playingPhase: PlayingPhase
     ): PlayUiState()
 }
