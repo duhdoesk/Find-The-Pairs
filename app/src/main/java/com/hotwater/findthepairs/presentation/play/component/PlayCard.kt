@@ -36,13 +36,14 @@ fun FaceUpCard(
 fun FaceDownCard() {
 
     Card(
+        shape = RoundedCornerShape(2.dp),
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(0.7f)
     ) {
         Surface(color = MaterialTheme.colorScheme.background) {
             Image(
-                painter = painterResource(id = R.drawable.back_of_the_card),
+                painter = painterResource(id = R.drawable.back_of_the_card_2),
                 contentDescription = "Art for the back of the card",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

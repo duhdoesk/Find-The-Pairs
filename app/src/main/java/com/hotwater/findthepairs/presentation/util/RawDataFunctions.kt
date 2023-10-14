@@ -41,7 +41,7 @@ fun getRawListOfCharacters(listSize: Int): List<Character> {
 }
 
 fun rawTesting(): List<Character> {
-    val charactersList = getRawListOfCharacters(14)
+    val charactersList = getRawListOfCharacters(12)
     Log.d("raw testing", charactersList.size.toString())
 
     val doubledList = (charactersList + charactersList).shuffled()
