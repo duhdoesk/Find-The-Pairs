@@ -24,7 +24,7 @@ sealed class PlayUiState {
         val theme: Theme,
         val foundPairs: List<Character>,
         val allPairs: List<Character>,
-        val turnedCharacters: Pair<Character?, Character?>,
+        val flippedCards: Pair<Int?, Int?>,
         val playingPhase: PlayingPhase
     ): PlayUiState()
 }

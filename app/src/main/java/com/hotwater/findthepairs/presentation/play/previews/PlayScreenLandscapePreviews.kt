@@ -8,5 +8,8 @@ import com.hotwater.findthepairs.presentation.util.LandscapePreviews
 @LandscapePreviews
 @Composable
 fun PlayScreenSuccessLandscapePreview() {
-    PlayScreenSuccess(uiState = getRawPlayUiStateSuccess())
+    PlayScreenSuccess(
+        uiState = getRawPlayUiStateSuccess(),
+        onTurn = { }
+    )
 }

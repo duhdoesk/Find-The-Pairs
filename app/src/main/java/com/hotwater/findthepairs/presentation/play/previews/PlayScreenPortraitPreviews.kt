@@ -8,5 +8,7 @@ import com.hotwater.findthepairs.presentation.util.PortraitPreviews
 @PortraitPreviews
 @Composable
 fun PlayScreenSuccessPortraitPreview() {
-    PlayScreenSuccess(uiState = getRawPlayUiStateSuccess())
+    PlayScreenSuccess(
+        uiState = getRawPlayUiStateSuccess(),
+        onTurn = { })
 }

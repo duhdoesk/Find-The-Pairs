@@ -12,7 +12,7 @@ fun getRawPlayUiStateSuccess(): PlayUiState.Success {
         theme = getRawTheme(),
         foundPairs = emptyList(),
         allPairs = rawTesting(),
-        turnedCharacters = Pair(null, null),
+        flippedCards = Pair(null, null),
         playingPhase = PlayingPhase.RUNNING
     )
 }
