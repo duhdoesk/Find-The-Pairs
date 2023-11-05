@@ -27,7 +27,7 @@ class PlayViewModel : ViewModel() {
 
         Log.d(
             PVM_TAG,
-            "flipCard() called - $playUiState"
+            "flipCard() called - ${playUiState.value}"
         )
 
         when (val state = playUiState.value) {
@@ -51,7 +51,7 @@ class PlayViewModel : ViewModel() {
 
                     Log.d(
                         PVM_TAG,
-                        "flipCard() first card - $playUiState"
+                        "flipCard() first card - ${playUiState.value}"
                     )
                 }
 
@@ -70,7 +70,7 @@ class PlayViewModel : ViewModel() {
 
                     Log.d(
                         PVM_TAG,
-                        "flipCard() second card - $playUiState"
+                        "flipCard() second card - ${playUiState.value}"
                     )
 
                     checkPair(flippedCardsUpdated)
@@ -98,7 +98,7 @@ class PlayViewModel : ViewModel() {
 
         Log.d(
             PVM_TAG,
-            "checkPair() called - $playUiState"
+            "checkPair() called - ${playUiState.value}"
         )
 
         when (val state = playUiState.value) {
@@ -118,7 +118,7 @@ class PlayViewModel : ViewModel() {
 
                     Log.d(
                         PVM_TAG,
-                        "checkPair() same character - $playUiState"
+                        "checkPair() same character - ${playUiState.value}"
                     )
                 }
 
@@ -129,7 +129,7 @@ class PlayViewModel : ViewModel() {
 
                     Log.d(
                         PVM_TAG,
-                        "checkPair() different characters - $playUiState"
+                        "checkPair() different characters - ${playUiState.value}"
                     )
                 }
             }

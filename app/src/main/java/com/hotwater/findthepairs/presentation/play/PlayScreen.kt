@@ -3,24 +3,16 @@ package com.hotwater.findthepairs.presentation.play
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.hotwater.findthepairs.R
-import com.hotwater.findthepairs.domain.model.Character
-import com.hotwater.findthepairs.presentation.play.component.PlayCard
 import com.hotwater.findthepairs.presentation.play.screens.LandscapeCompactPlayScreenSuccess
 import com.hotwater.findthepairs.presentation.play.screens.LandscapeExpandedPlayScreenSuccess
 import com.hotwater.findthepairs.presentation.play.screens.PortraitCompactPlayScreenSuccess
 import com.hotwater.findthepairs.presentation.play.screens.PortraitExpandedPlayScreenSuccess
 import com.hotwater.findthepairs.presentation.util.DeviceOrientation
 import com.hotwater.findthepairs.presentation.util.WindowInfo
-import com.hotwater.findthepairs.presentation.util.screens.ErrorScreen
-import com.hotwater.findthepairs.presentation.util.screens.LoadingScreen
 import com.hotwater.findthepairs.presentation.util.rememberDeviceOrientation
 import com.hotwater.findthepairs.presentation.util.rememberWindowInfo
-import com.hotwater.findthepairs.presentation.util.screens.RotateDeviceScreen
+import com.hotwater.findthepairs.presentation.util.screens.ErrorScreen
+import com.hotwater.findthepairs.presentation.util.screens.LoadingScreen
 
 @Composable
 fun PlayScreen(playViewModel: PlayViewModel = PlayViewModel()) {
@@ -31,13 +23,7 @@ fun PlayScreen(playViewModel: PlayViewModel = PlayViewModel()) {
 
         is PlayUiState.Success -> PlayScreenSuccess(
             uiState = uiState,
-            onTurn = {
-                Log.d(
-                    "PlayScreenSuccess",
-                    "onTurn $it"
-                )
-                playViewModel.flipCard(it)
-            }
+            playViewModel = playViewModel
         )
     }
 }
@@ -45,7 +31,7 @@ fun PlayScreen(playViewModel: PlayViewModel = PlayViewModel()) {
 @Composable
 fun PlayScreenSuccess(
     uiState: PlayUiState.Success,
-    onTurn: (index: Int) -> Unit
+    playViewModel: PlayViewModel
 ) {
 
     when (rememberDeviceOrientation()) {
@@ -56,7 +42,7 @@ fun PlayScreenSuccess(
                     "PlayScreenSuccess",
                     "onTurn $it"
                 )
-                onTurn(it)
+                playViewModel.flipCard(it)
             }
         )
 
@@ -82,7 +68,8 @@ fun PortraitPlayScreenSuccess(
                         "PortraitPlayScreenSuccess",
                         "onTurn $it"
                     )
-                    onTurn(it) }
+                    onTurn(it)
+                }
             )
         }
     }
