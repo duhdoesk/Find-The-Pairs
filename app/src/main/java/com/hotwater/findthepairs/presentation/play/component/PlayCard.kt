@@ -13,8 +13,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import coil.size.Scale
 import com.hotwater.findthepairs.R
 import com.hotwater.findthepairs.domain.model.Character
 
@@ -26,7 +30,6 @@ fun PlayCard(
 ) {
 
     if (turned) FaceUpCard(character = character)
-
     else FaceDownCard(onTurn = {
         Log.d(
             "PlayCard",
@@ -41,6 +44,29 @@ fun FaceUpCard(
     character: Character
 ) {
 
+    Card(
+        shape = RoundedCornerShape(6.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+    ) {
+
+        Surface(color = MaterialTheme.colorScheme.background) {
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(character.characterPicture)
+                    .crossfade(true)
+                    .scale(Scale.FILL)
+                    .build(),
+                contentDescription = "Character Picture",
+                placeholder = painterResource(id = R.drawable.hot_water_logo_square),
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+    }
 }
 
 @Composable

@@ -2,7 +2,6 @@ package com.hotwater.findthepairs.presentation.play.screens
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -75,7 +74,7 @@ fun PortraitCompactPlayScreenSuccess(
             }
 
             Row(Modifier.fillMaxWidth()) {
-                Text(text = "Pares Encontrados: ${uiState.foundPairs.size / 2} / ${uiState.allPairs.size / 2}")
+                Text(text = "Pares Encontrados: ${uiState.cards.size / 2} / ${uiState.cards.size / 2}")
             }
 
             Row(

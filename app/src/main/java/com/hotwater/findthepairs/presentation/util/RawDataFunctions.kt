@@ -3,17 +3,19 @@ package com.hotwater.findthepairs.presentation.util
 import android.util.Log
 import com.hotwater.findthepairs.domain.model.Character
 import com.hotwater.findthepairs.domain.model.Theme
+import com.hotwater.findthepairs.presentation.play.CardState
+import com.hotwater.findthepairs.presentation.play.FlippingState
 import com.hotwater.findthepairs.presentation.play.PlayUiState
-import com.hotwater.findthepairs.presentation.play.PlayingPhase
+import com.hotwater.findthepairs.presentation.play.PlayingCard
+import com.hotwater.findthepairs.presentation.play.PlayingState
 import kotlin.random.Random
 
 fun getRawPlayUiStateSuccess(): PlayUiState.Success {
     return PlayUiState.Success(
         theme = getRawTheme(),
-        foundPairs = emptyList(),
-        allPairs = rawTesting(),
-        flippedCards = Pair(null, null),
-        playingPhase = PlayingPhase.RUNNING
+        cards = rawTesting(),
+        flippingState = FlippingState.NONE,
+        playingState = PlayingState.RUNNING
     )
 }
 
@@ -40,12 +42,18 @@ fun getRawListOfCharacters(listSize: Int): List<Character> {
     }
 }
 
-fun rawTesting(): List<Character> {
+fun rawTesting(): List<PlayingCard> {
     val charactersList = getRawListOfCharacters(12)
     Log.d("raw testing", charactersList.size.toString())
 
     val doubledList = (charactersList + charactersList).shuffled()
     Log.d("raw testing", doubledList.size.toString())
 
-    return doubledList
+    val playingCardList = mutableListOf<PlayingCard>()
+
+    doubledList.forEach { character ->
+        playingCardList.add(PlayingCard(character, CardState.HIDDEN))
+    }
+
+    return playingCardList
 }

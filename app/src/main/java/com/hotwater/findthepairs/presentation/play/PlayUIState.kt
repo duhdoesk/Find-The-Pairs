@@ -22,19 +22,29 @@ sealed class PlayUiState {
      */
     data class Success(
         val theme: Theme,
-        val foundPairs: List<Character>,
-        val allPairs: List<Character>,
-        val flippedCards: Pair<Int?, Int?>,
-        val playingPhase: PlayingPhase
+        val cards: List<PlayCard>,
+        val flippingState: FLippingState,
+        val playState: PlayState
     ): PlayUiState()
 }
 
-/**
- * When the UI State is success, the playing phase must be one of those:
- * NOT_STARTED - waiting for the user to start the game;
- * RUNNING - user started the game and is looking for the pairs, but they did not found it all; or
- * OVER - user found all the pairs and won the game.
- */
-enum class PlayingPhase {
-    NOT_STARTED, RUNNING, OVER
+
+data class PlayCard(
+    val character: Character,
+    val cardState: CardState
+)
+
+
+enum class CardState {
+    HIDDEN, FLIPPED, FOUND
+}
+
+sealed class FLippingState {
+    object None: FLippingState()
+    data class Single(val single: Int): FLippingState()
+    data class Pair(val pair: kotlin.Pair<Int, Int>): FLippingState()
+}
+
+enum class PlayState {
+    PAUSED, PLAYING, FINISHED
 }
