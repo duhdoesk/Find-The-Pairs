@@ -13,9 +13,7 @@ sealed class PlayUiState {
     /**
      * When there has been an error while loading data and/or setting all stuff up
      */
-    data class Error(
-        val errorMessage: String
-    ): PlayUiState()
+    data class Error(val errorMessage: String): PlayUiState()
 
     /**
      * When all the data has been successfully loaded and the game is ready to start
@@ -23,8 +21,8 @@ sealed class PlayUiState {
     data class Success(
         val theme: Theme,
         val cards: List<PlayCard>,
-        val flippingState: FLippingState,
-        val playState: PlayState
+        val flippingState: FlippingState,
+        val gameState: GameState
     ): PlayUiState()
 }
 
@@ -34,17 +32,15 @@ data class PlayCard(
     val cardState: CardState
 )
 
+sealed class FlippingState {
+    object NotFlipped: FlippingState()
+    data class Flipped(val pair: Pair<Int?, Int?>): FlippingState()
+}
 
 enum class CardState {
-    HIDDEN, FLIPPED, FOUND
+    FOUND, NOT_FOUND
 }
 
-sealed class FLippingState {
-    object None: FLippingState()
-    data class Single(val single: Int): FLippingState()
-    data class Pair(val pair: kotlin.Pair<Int, Int>): FLippingState()
-}
-
-enum class PlayState {
+enum class GameState {
     PAUSED, PLAYING, FINISHED
 }
