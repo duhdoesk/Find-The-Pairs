@@ -29,7 +29,7 @@ sealed class PlayUiState {
 
 data class PlayCard(
     val character: Character,
-    val cardState: CardState
+    var cardState: CardState
 )
 
 sealed class FlippingState {
