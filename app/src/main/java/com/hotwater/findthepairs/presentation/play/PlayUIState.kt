@@ -21,7 +21,8 @@ sealed class PlayUiState {
     data class Success(
         val theme: Theme,
         val cards: List<PlayCard>,
-        val flippingState: FlippingState,
+        val flipped: List<PlayCard>,
+        val found: List<PlayCard>,
         val gameState: GameState
     ): PlayUiState()
 }
@@ -32,13 +33,8 @@ data class PlayCard(
     var cardState: CardState
 )
 
-sealed class FlippingState {
-    object NotFlipped: FlippingState()
-    data class Flipped(val pair: Pair<Int?, Int?>): FlippingState()
-}
-
 enum class CardState {
-    FOUND, NOT_FOUND
+    HIDDEN, FLIPPED, FOUND
 }
 
 enum class GameState {

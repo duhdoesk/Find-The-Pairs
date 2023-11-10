@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hotwater.findthepairs.R
+import com.hotwater.findthepairs.presentation.play.PlayCard
 import com.hotwater.findthepairs.presentation.play.PlayUiState
 import com.hotwater.findthepairs.presentation.play.component.PlayCardsLazyVerticalGrid
 
@@ -34,7 +35,7 @@ import com.hotwater.findthepairs.presentation.play.component.PlayCardsLazyVertic
 @Composable
 fun PortraitCompactPlayScreenSuccess(
     uiState: PlayUiState.Success,
-    onTurn: (index: Int) -> Unit
+    onTurn: (card: PlayCard) -> Unit
 ) {
 
     Box(

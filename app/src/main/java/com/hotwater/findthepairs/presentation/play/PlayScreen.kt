@@ -53,7 +53,7 @@ fun PlayScreenSuccess(
 @Composable
 fun PortraitPlayScreenSuccess(
     uiState: PlayUiState.Success,
-    onTurn: (index: Int) -> Unit
+    onTurn: (card: PlayCard) -> Unit
 ) {
     when (rememberWindowInfo().screenHeightInfo) {
         is WindowInfo.WindowType.Expanded -> {

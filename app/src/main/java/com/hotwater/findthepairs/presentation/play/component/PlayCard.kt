@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -21,22 +20,30 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.hotwater.findthepairs.R
 import com.hotwater.findthepairs.domain.model.Character
+import com.hotwater.findthepairs.presentation.play.CardState
 
 @Composable
 fun PlayCard(
     character: Character,
-    turned: Boolean,
+    cardState: CardState,
     onTurn: () -> Unit
 ) {
 
-    if (turned) FaceUpCard(character = character)
-    else FaceDownCard(onTurn = {
-        Log.d(
-            "PlayCard",
-            "onTurn"
-        )
-        onTurn()
-    })
+    when (cardState) {
+        CardState.FOUND -> {
+
+        }
+
+        CardState.FLIPPED -> {
+            FaceUpCard(character = character)
+        }
+
+        CardState.HIDDEN -> {
+            FaceDownCard(
+                onTurn = { onTurn() }
+            )
+        }
+    }
 }
 
 @Composable

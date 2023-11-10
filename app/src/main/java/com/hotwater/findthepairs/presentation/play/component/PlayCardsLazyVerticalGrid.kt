@@ -8,7 +8,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.hotwater.findthepairs.domain.model.Character
 import com.hotwater.findthepairs.presentation.play.CardState
+import com.hotwater.findthepairs.presentation.play.PlayCard
 import com.hotwater.findthepairs.presentation.play.PlayUiState
 
 @Composable
@@ -16,7 +18,7 @@ fun PlayCardsLazyVerticalGrid(
     uiState: PlayUiState.Success,
     columnsMinSize: Dp = 60.dp,
     cardsSpacing: Dp = 6.dp,
-    onTurn: (index: Int) -> Unit
+    onTurn: (card: PlayCard) -> Unit
 ) {
 
     LazyVerticalGrid(
@@ -25,27 +27,26 @@ fun PlayCardsLazyVerticalGrid(
         horizontalArrangement = Arrangement.spacedBy(cardsSpacing)
     ) {
 
-        uiState.cards.forEachIndexed { index, card ->
+        uiState.cards.forEach { card ->
             item {
-                val turned = card.state == CardState.FLIPPED
 
                 Row {
                     PlayCard(
                         character = card.character,
-                        turned = turned,
+                        cardState = card.cardState,
                         onTurn = {
                             Log.d(
                                 "PlayCardsLazyVerticalGrid",
-                                "onTurn $index"
+                                "onTurn ${card.character.characterName}"
                             )
-                            onTurn(index)
+                            onTurn(card)
                         }
                     )
                 }
 
                 Log.d(
                     "LazyVerticalGrid",
-                    "$turned"
+                    "cardState = ${card.cardState.toString()}"
                 )
             }
         }
