@@ -35,7 +35,9 @@ class PlayViewModel : ViewModel() {
                 gameState = gameState
             )
         } else {
-            PlayUiState.Error("We could not load the data. Try again.")
+            PlayUiState.Error(
+                errorMessage = "We could not load the data. Try again.",
+                retry = { getPlayCardsData() })
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), PlayUiState.Loading)
 

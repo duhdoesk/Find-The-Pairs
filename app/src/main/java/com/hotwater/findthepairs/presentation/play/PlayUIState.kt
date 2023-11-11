@@ -13,7 +13,10 @@ sealed class PlayUiState {
     /**
      * When there has been an error while loading data and/or setting all stuff up
      */
-    data class Error(val errorMessage: String): PlayUiState()
+    data class Error(
+        val errorMessage: String,
+        val retry: () -> Unit
+    ): PlayUiState()
 
     /**
      * When all the data has been successfully loaded and the game is ready to start
