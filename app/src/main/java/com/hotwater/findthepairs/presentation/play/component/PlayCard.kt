@@ -67,7 +67,7 @@ fun FaceUpCard(
                     .scale(Scale.FILL)
                     .build(),
                 contentDescription = "Character Picture",
-                placeholder = painterResource(id = R.drawable.hot_water_logo_square),
+                placeholder = painterResource(id = R.drawable.baseline_pause_24),
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()

@@ -3,6 +3,7 @@ package com.hotwater.findthepairs.presentation.play
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.hotwater.findthepairs.presentation.play.screens.LandscapeCompactPlayScreenSuccess
 import com.hotwater.findthepairs.presentation.play.screens.LandscapeExpandedPlayScreenSuccess
 import com.hotwater.findthepairs.presentation.play.screens.PortraitCompactPlayScreenSuccess
@@ -17,12 +18,14 @@ import com.hotwater.findthepairs.presentation.util.screens.LoadingScreen
 @Composable
 fun PlayScreen(playViewModel: PlayViewModel = PlayViewModel()) {
 
-    when (val uiState = playViewModel.playUiState.collectAsState().value) {
+    val uiState: PlayUiState by playViewModel.playUiState.collectAsState()
+
+    when (uiState) {
         is PlayUiState.Loading -> LoadingScreen()
         is PlayUiState.Error -> ErrorScreen()
 
         is PlayUiState.Success -> PlayScreenSuccess(
-            uiState = uiState,
+            uiState = uiState as PlayUiState.Success,
             playViewModel = playViewModel
         )
     }

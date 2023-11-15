@@ -13,8 +13,6 @@ fun getRawPlayUiStateSuccess(): PlayUiState.Success {
     return PlayUiState.Success(
         theme = getRawTheme(),
         cards = rawTesting(),
-        flipped = emptyList(),
-        found = emptyList(),
         gameState = GameState.PLAYING
     )
 }

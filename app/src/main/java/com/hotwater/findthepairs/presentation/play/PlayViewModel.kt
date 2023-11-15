@@ -1,5 +1,6 @@
 package com.hotwater.findthepairs.presentation.play
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hotwater.findthepairs.domain.model.Character
@@ -17,21 +18,20 @@ class PlayViewModel : ViewModel() {
 
     private val cards = MutableStateFlow<List<PlayCard>>(emptyList())
 
+    private val gameState = MutableStateFlow<GameState>(GameState.PLAYING)
+
     private val flipped = MutableStateFlow(
         cards.value.filter { it.cardState == CardState.FLIPPED })
 
     private val found = MutableStateFlow(
         cards.value.filter { it.cardState == CardState.FOUND })
 
-    private val gameState = MutableStateFlow<GameState>(GameState.PLAYING)
 
-    val playUiState = combine(cards, flipped, found, gameState) { cards, flipped, found, gameState ->
+    val playUiState = combine(cards, gameState) { cards, gameState ->
         if (cards.isNotEmpty()) {
             PlayUiState.Success(
                 theme = getRawTheme(),
                 cards = cards,
-                flipped = flipped,
-                found = found,
                 gameState = gameState
             )
         } else {
@@ -62,6 +62,8 @@ class PlayViewModel : ViewModel() {
      * the 'flip' move will only be available when the state is PlayUiState.Playing
      */
     fun flipCard(card: PlayCard) {
+        Log.d("flipCard", "flipCard called")
+
         val cardsUpdated = cards.value.map { playCard ->
             if (playCard == card) {
                 PlayCard(character = card.character, cardState = CardState.FLIPPED)
@@ -71,6 +73,8 @@ class PlayViewModel : ViewModel() {
         }
 
         cards.update { cardsUpdated }
+        Log.d("flipCard cards", cards.value.toString())
+        Log.d("flipCard states", cards.value.map { it.cardState }.toString())
         checkFlipped()
     }
 

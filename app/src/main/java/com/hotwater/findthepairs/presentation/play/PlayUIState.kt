@@ -24,8 +24,6 @@ sealed class PlayUiState {
     data class Success(
         val theme: Theme,
         val cards: List<PlayCard>,
-        val flipped: List<PlayCard>,
-        val found: List<PlayCard>,
         val gameState: GameState
     ): PlayUiState()
 }
