@@ -49,8 +49,8 @@ fun rawTesting(): List<PlayCard> {
 
     val playingCardList = mutableListOf<PlayCard>()
 
-    doubledList.forEach { character ->
-        playingCardList.add(PlayCard(character, CardState.HIDDEN))
+    doubledList.forEachIndexed { index, character ->
+        playingCardList.add(PlayCard(index, character, CardState.HIDDEN))
     }
 
     return playingCardList

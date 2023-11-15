@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hotwater.findthepairs.presentation.play.screens.LandscapeCompactPlayScreenSuccess
 import com.hotwater.findthepairs.presentation.play.screens.LandscapeExpandedPlayScreenSuccess
 import com.hotwater.findthepairs.presentation.play.screens.PortraitCompactPlayScreenSuccess
@@ -16,7 +17,7 @@ import com.hotwater.findthepairs.presentation.util.screens.ErrorScreen
 import com.hotwater.findthepairs.presentation.util.screens.LoadingScreen
 
 @Composable
-fun PlayScreen(playViewModel: PlayViewModel = PlayViewModel()) {
+fun PlayScreen(playViewModel: PlayViewModel = viewModel()) {
 
     val uiState: PlayUiState by playViewModel.playUiState.collectAsState()
 

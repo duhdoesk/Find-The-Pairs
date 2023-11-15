@@ -30,6 +30,7 @@ sealed class PlayUiState {
 
 
 data class PlayCard(
+    val cardId: Int,
     val character: Character,
     var cardState: CardState
 )

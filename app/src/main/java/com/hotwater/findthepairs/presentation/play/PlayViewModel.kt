@@ -6,26 +6,22 @@ import androidx.lifecycle.viewModelScope
 import com.hotwater.findthepairs.domain.model.Character
 import com.hotwater.findthepairs.presentation.util.getRawListOfCharacters
 import com.hotwater.findthepairs.presentation.util.getRawTheme
+import com.hotwater.findthepairs.presentation.util.rawTesting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 const val PVM_TAG = "PlayViewModel Log"
 
 class PlayViewModel : ViewModel() {
 
     private val cards = MutableStateFlow<List<PlayCard>>(emptyList())
-
-    private val gameState = MutableStateFlow<GameState>(GameState.PLAYING)
-
-    private val flipped = MutableStateFlow(
-        cards.value.filter { it.cardState == CardState.FLIPPED })
-
-    private val found = MutableStateFlow(
-        cards.value.filter { it.cardState == CardState.FOUND })
-
+    private val gameState = MutableStateFlow(GameState.PLAYING)
 
     val playUiState = combine(cards, gameState) { cards, gameState ->
         if (cards.isNotEmpty()) {
@@ -46,14 +42,7 @@ class PlayViewModel : ViewModel() {
     }
 
     private fun getPlayCardsData() {
-        val characters = getRawListOfCharacters(16)
-        val playCards = characters.map { character ->
-            PlayCard(
-                character = character,
-                cardState = CardState.HIDDEN
-            )
-        }
-        cards.update { playCards }
+        cards.update { rawTesting() }
     }
 
 
@@ -62,19 +51,13 @@ class PlayViewModel : ViewModel() {
      * the 'flip' move will only be available when the state is PlayUiState.Playing
      */
     fun flipCard(card: PlayCard) {
-        Log.d("flipCard", "flipCard called")
-
         val cardsUpdated = cards.value.map { playCard ->
-            if (playCard == card) {
-                PlayCard(character = card.character, cardState = CardState.FLIPPED)
-            }
-
-            else playCard
+            if (playCard.cardId == card.cardId) {
+                playCard.copy(cardState = CardState.FLIPPED)
+            } else playCard
         }
 
         cards.update { cardsUpdated }
-        Log.d("flipCard cards", cards.value.toString())
-        Log.d("flipCard states", cards.value.map { it.cardState }.toString())
         checkFlipped()
     }
 
@@ -87,53 +70,29 @@ class PlayViewModel : ViewModel() {
      * the 'flip' move will only be available when the state is PlayUiState.Playing
      */
     private fun checkFlipped() {
-        val cardsUpdated: List<PlayCard>
+        val flippedCards = cards.value.filter { it.cardState == CardState.FLIPPED }
+        if (flippedCards.size != 2) return
 
-        /**
-         * first, we check if we got exactly 2 flipped cards.
-         */
-        if (flipped.value.size == 2) {
-
-            /**
-             * if the both flipped cards are the same
-             */
-            if (flipped.value.first().character == flipped.value.last().character) {
-                cardsUpdated = cards.value.map { playCard ->
-                    if (playCard.character == flipped.value.first().character) {
-                        PlayCard(character = playCard.character, cardState = CardState.FOUND)
+        val (first, second) = flippedCards
+        if (first.character.characterId == second.character.characterId) {
+            cards.update { cards ->
+                cards.map {
+                    if (it.cardId == first.cardId || it.cardId == second.cardId) {
+                        it.copy(cardState = CardState.FOUND)
+                    } else {
+                        it
                     }
-
-                    else playCard
                 }
             }
-
-            /**
-             * if they are different
-             */
-            else {
-                cardsUpdated = cards.value.map { playCard ->
-                    if (playCard.character == flipped.value.first().character) {
-                        PlayCard(character = playCard.character, cardState = CardState.HIDDEN)
+        } else {
+            cards.update { cards ->
+                cards.map {
+                    if (it.cardState == CardState.FLIPPED) {
+                        it.copy(cardState = CardState.HIDDEN)
+                    } else {
+                        it
                     }
-
-                    else playCard
                 }
-            }
-
-            cards.update { cardsUpdated }
-        }
-
-        /**
-         * if somehow the user managed to flip more than 2 cards, we must just make them
-         * hidden again
-         */
-        else if (flipped.value.size > 2) {
-            cardsUpdated = cards.value.map { playCard ->
-                if (playCard.character == flipped.value.first().character) {
-                    PlayCard(character = playCard.character, cardState = CardState.HIDDEN)
-                }
-
-                else playCard
             }
         }
     }
