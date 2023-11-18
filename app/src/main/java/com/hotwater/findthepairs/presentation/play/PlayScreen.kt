@@ -41,13 +41,7 @@ fun PlayScreenSuccess(
     when (rememberDeviceOrientation()) {
         is DeviceOrientation.Portrait -> PortraitPlayScreenSuccess(
             uiState = uiState,
-            onTurn = {
-                Log.d(
-                    "PlayScreenSuccess",
-                    "onTurn $it"
-                )
-                playViewModel.flipCard(it)
-            }
+            onTurn = { playViewModel.flipCard(it) }
         )
 
         else -> LandscapePlayScreenSuccess(uiState = uiState)
@@ -67,13 +61,7 @@ fun PortraitPlayScreenSuccess(
         else -> {
             PortraitCompactPlayScreenSuccess(
                 uiState = uiState,
-                onTurn = {
-                    Log.d(
-                        "PortraitPlayScreenSuccess",
-                        "onTurn $it"
-                    )
-                    onTurn(it)
-                }
+                onTurn = { onTurn(it) }
             )
         }
     }

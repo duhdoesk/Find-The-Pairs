@@ -7,6 +7,7 @@ import com.hotwater.findthepairs.domain.model.Character
 import com.hotwater.findthepairs.presentation.util.getRawListOfCharacters
 import com.hotwater.findthepairs.presentation.util.getRawTheme
 import com.hotwater.findthepairs.presentation.util.rawTesting
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -53,12 +54,14 @@ class PlayViewModel : ViewModel() {
     fun flipCard(card: PlayCard) {
         val cardsUpdated = cards.value.map { playCard ->
             if (playCard.cardId == card.cardId) {
-                playCard.copy(cardState = CardState.FLIPPED)
+                playCard.copy(cardState = playCard.cardState.next)
             } else playCard
         }
 
         cards.update { cardsUpdated }
-        checkFlipped()
+        viewModelScope.launch {
+            checkFlipped()
+        }
     }
 
 
@@ -69,16 +72,31 @@ class PlayViewModel : ViewModel() {
      * otherwise, we update it to HIDDEN again.
      * the 'flip' move will only be available when the state is PlayUiState.Playing
      */
-    private fun checkFlipped() {
-        val flippedCards = cards.value.filter { it.cardState == CardState.FLIPPED }
-        if (flippedCards.size != 2) return
+    private suspend fun checkFlipped() {
+
+        val flippedCards = cards.value.filter { it.cardState == CardState.FaceUp }
+
+        if (flippedCards.size < 2) return
+        else if (flippedCards.size > 2) {
+            cards.update { cards ->
+                cards.map { playCard ->
+                    if (playCard.cardState == CardState.FaceUp) {
+                        playCard.copy(cardState = playCard.cardState.next)
+                    } else {
+                        playCard
+                    }
+                }
+            }
+        }
+
+        delay(1400)
 
         val (first, second) = flippedCards
         if (first.character.characterId == second.character.characterId) {
             cards.update { cards ->
                 cards.map {
                     if (it.cardId == first.cardId || it.cardId == second.cardId) {
-                        it.copy(cardState = CardState.FOUND)
+                        it.copy(cardState = CardState.Found)
                     } else {
                         it
                     }
@@ -86,11 +104,11 @@ class PlayViewModel : ViewModel() {
             }
         } else {
             cards.update { cards ->
-                cards.map {
-                    if (it.cardState == CardState.FLIPPED) {
-                        it.copy(cardState = CardState.HIDDEN)
+                cards.map { playCard ->
+                    if (playCard.cardState == CardState.FaceUp) {
+                        playCard.copy(cardState = playCard.cardState.next)
                     } else {
-                        it
+                        playCard
                     }
                 }
             }

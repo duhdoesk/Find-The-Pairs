@@ -1,6 +1,8 @@
 package com.hotwater.findthepairs.presentation.play.component
 
-import android.util.Log
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
@@ -11,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -21,27 +24,46 @@ import coil.size.Scale
 import com.hotwater.findthepairs.R
 import com.hotwater.findthepairs.domain.model.Character
 import com.hotwater.findthepairs.presentation.play.CardState
+import com.hotwater.findthepairs.presentation.play.PlayCard
 
 @Composable
 fun PlayCard(
-    character: Character,
-    cardState: CardState,
-    onTurn: () -> Unit
+    playCard: PlayCard,
+    onClick: () -> Unit
 ) {
 
-    when (cardState) {
-        CardState.FOUND -> {
+    val rotation = animateFloatAsState(
+        targetValue = playCard.cardState.angle,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing,
+        ),
+        label = ""
+    )
 
-        }
+    Card(
+        shape = RoundedCornerShape(6.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .graphicsLayer {
+                rotationY = rotation.value
+            }
+    ) {
+        when (playCard.cardState) {
+            CardState.Found -> {
 
-        CardState.FLIPPED -> {
-            FaceUpCard(character = character)
-        }
+            }
 
-        CardState.HIDDEN -> {
-            FaceDownCard(
-                onTurn = { onTurn() }
-            )
+            CardState.FaceUp -> {
+                FaceUpCard(character = playCard.character)
+            }
+
+            CardState.FaceDown -> {
+                FaceDownCard(
+                    onClick = { onClick() }
+                )
+            }
         }
     }
 }
@@ -51,58 +73,41 @@ fun FaceUpCard(
     character: Character
 ) {
 
-    Card(
-        shape = RoundedCornerShape(6.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-    ) {
+    Surface(color = MaterialTheme.colorScheme.background) {
 
-        Surface(color = MaterialTheme.colorScheme.background) {
-
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(character.characterPicture)
-                    .crossfade(true)
-                    .scale(Scale.FILL)
-                    .build(),
-                contentDescription = "Character Picture",
-                placeholder = painterResource(id = R.drawable.baseline_pause_24),
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-        }
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(character.characterPicture)
+                .crossfade(true)
+                .scale(Scale.FILL)
+                .build(),
+            contentDescription = "Character Picture",
+            placeholder = painterResource(id = R.drawable.baseline_pause_24),
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    rotationY = 180f
+                },
+        )
     }
 }
 
 @Composable
 fun FaceDownCard(
-    onTurn: () -> Unit
+    onClick: () -> Unit
 ) {
 
-    Card(
-        shape = RoundedCornerShape(6.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .clickable {
-                Log.d(
-                    "FaceDownCard",
-                    "onTurn"
-                )
-                onTurn()
-            }
+    Surface(
+        color = MaterialTheme.colorScheme.background,
+        modifier = Modifier.clickable { onClick() }
     ) {
-
-        Surface(color = MaterialTheme.colorScheme.background) {
-            Image(
-                painter = painterResource(id = R.drawable.hot_water_logo_square),
-                contentDescription = "Art for the back of the card",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-        }
+        Image(
+            painter = painterResource(id = R.drawable.hot_water_logo_square),
+            contentDescription = "Art for the back of the card",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
     }
 }

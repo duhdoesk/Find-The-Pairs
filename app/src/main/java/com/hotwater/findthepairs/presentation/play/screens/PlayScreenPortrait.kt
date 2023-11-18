@@ -65,7 +65,7 @@ fun PortraitCompactPlayScreenSuccess(
                     uiState = uiState,
                     columnsMinSize = 60.dp,
                     cardsSpacing = 6.dp,
-                    onTurn = {
+                    onClick = {
                         Log.d(
                             "PortraitCompactPlayScreenSuccess",
                             "onTurn $it"

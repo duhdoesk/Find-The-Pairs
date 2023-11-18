@@ -35,8 +35,21 @@ data class PlayCard(
     var cardState: CardState
 )
 
-enum class CardState {
-    HIDDEN, FLIPPED, FOUND
+enum class CardState(val angle: Float) {
+    FaceDown(0f) {
+        override val next: CardState
+            get() = FaceUp
+    },
+    FaceUp(180f) {
+        override val next: CardState
+            get() = FaceDown
+    },
+    Found(0f) {
+        override val next: CardState
+            get() = FaceDown
+    };
+
+    abstract val next: CardState
 }
 
 enum class GameState {
