@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.hotwater.findthepairs.presentation.play.GameState
 import com.hotwater.findthepairs.presentation.play.PlayCard
 import com.hotwater.findthepairs.presentation.play.PlayUiState
 
@@ -31,7 +32,11 @@ fun PlayCardsLazyVerticalGrid(
                 Row {
                     PlayCard(
                         playCard = card,
-                        onClick = { onClick(card) }
+                        onClick = {
+                            if (uiState.gameState == GameState.PLAYING) {
+                                onClick(card)
+                            }
+                        }
                     )
                 }
 

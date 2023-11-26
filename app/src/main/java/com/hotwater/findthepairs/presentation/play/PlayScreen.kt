@@ -41,7 +41,8 @@ fun PlayScreenSuccess(
     when (rememberDeviceOrientation()) {
         is DeviceOrientation.Portrait -> PortraitPlayScreenSuccess(
             uiState = uiState,
-            onTurn = { playViewModel.flipCard(it) }
+            onTurn = { playViewModel.flipCard(it) },
+            onPlayOrPause = { playViewModel.switchGameState() }
         )
 
         else -> LandscapePlayScreenSuccess(uiState = uiState)
@@ -51,7 +52,8 @@ fun PlayScreenSuccess(
 @Composable
 fun PortraitPlayScreenSuccess(
     uiState: PlayUiState.Success,
-    onTurn: (card: PlayCard) -> Unit
+    onTurn: (card: PlayCard) -> Unit,
+    onPlayOrPause: () -> Unit
 ) {
     when (rememberWindowInfo().screenHeightInfo) {
         is WindowInfo.WindowType.Expanded -> {
@@ -61,7 +63,8 @@ fun PortraitPlayScreenSuccess(
         else -> {
             PortraitCompactPlayScreenSuccess(
                 uiState = uiState,
-                onTurn = { onTurn(it) }
+                onTurn = { onTurn(it) },
+                onPlayOrPause = { onPlayOrPause() }
             )
         }
     }

@@ -23,8 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hotwater.findthepairs.R
+import com.hotwater.findthepairs.presentation.play.GameState
 import com.hotwater.findthepairs.presentation.play.PlayCard
 import com.hotwater.findthepairs.presentation.play.PlayUiState
+import com.hotwater.findthepairs.presentation.play.component.GamePausedBanner
+import com.hotwater.findthepairs.presentation.play.component.GameStateButton
 import com.hotwater.findthepairs.presentation.play.component.PlayCardsLazyVerticalGrid
 
 
@@ -35,7 +38,8 @@ import com.hotwater.findthepairs.presentation.play.component.PlayCardsLazyVertic
 @Composable
 fun PortraitCompactPlayScreenSuccess(
     uiState: PlayUiState.Success,
-    onTurn: (card: PlayCard) -> Unit
+    onTurn: (card: PlayCard) -> Unit,
+    onPlayOrPause: () -> Unit
 ) {
 
     Box(
@@ -61,17 +65,22 @@ fun PortraitCompactPlayScreenSuccess(
                 modifier = Modifier.weight(1f)
             ) {
 
-                PlayCardsLazyVerticalGrid(
-                    uiState = uiState,
-                    columnsMinSize = 60.dp,
-                    cardsSpacing = 6.dp,
-                    onClick = {
-                        Log.d(
-                            "PortraitCompactPlayScreenSuccess",
-                            "onTurn $it"
-                        )
-                        onTurn(it) }
-                )
+                Box(contentAlignment = Alignment.Center) {
+                    PlayCardsLazyVerticalGrid(
+                        uiState = uiState,
+                        columnsMinSize = 60.dp,
+                        cardsSpacing = 6.dp,
+                        onClick = {
+                            Log.d(
+                                "PortraitCompactPlayScreenSuccess",
+                                "onTurn $it"
+                            )
+                            onTurn(it) }
+                    )
+
+                    if (uiState.gameState == GameState.PAUSED) GamePausedBanner()
+                }
+
             }
 
             Row(Modifier.fillMaxWidth()) {
@@ -87,13 +96,11 @@ fun PortraitCompactPlayScreenSuccess(
                     text = "02:47",
                     fontSize = 28.sp
                 )
-                TextButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_pause_24),
-                        contentDescription = "Pause Icon"
-                    )
-                    Text(text = "Pausa")
-                }
+
+                GameStateButton(
+                    gameState = uiState.gameState,
+                    onClick = { onPlayOrPause() }
+                )
             }
         }
     }

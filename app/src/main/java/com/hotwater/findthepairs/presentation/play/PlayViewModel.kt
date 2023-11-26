@@ -63,6 +63,31 @@ class PlayViewModel : ViewModel() {
             checkFlipped()
         }
     }
+    
+    private fun unflipCards() {
+        cards.update { cards ->
+            cards.map { playCard ->
+                if (playCard.cardState == CardState.FaceUp) {
+                    playCard.copy(cardState = playCard.cardState.next)
+                } else {
+                    playCard
+                }
+            }
+        }
+    }
+
+    /**
+     * function that alternates gameState between playing and paused
+     */
+    fun switchGameState() {
+        if (gameState.value == GameState.PLAYING) {
+            gameState.value = GameState.PAUSED
+            unflipCards()
+        }
+        else {
+            gameState.value = GameState.PLAYING
+        }
+    }
 
 
     /**
@@ -78,15 +103,7 @@ class PlayViewModel : ViewModel() {
 
         if (flippedCards.size < 2) return
         else if (flippedCards.size > 2) {
-            cards.update { cards ->
-                cards.map { playCard ->
-                    if (playCard.cardState == CardState.FaceUp) {
-                        playCard.copy(cardState = playCard.cardState.next)
-                    } else {
-                        playCard
-                    }
-                }
-            }
+            unflipCards()
         }
 
         delay(1400)
@@ -103,15 +120,7 @@ class PlayViewModel : ViewModel() {
                 }
             }
         } else {
-            cards.update { cards ->
-                cards.map { playCard ->
-                    if (playCard.cardState == CardState.FaceUp) {
-                        playCard.copy(cardState = playCard.cardState.next)
-                    } else {
-                        playCard
-                    }
-                }
-            }
+            unflipCards()
         }
     }
 }
